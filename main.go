@@ -5,8 +5,8 @@ import (
 )
 
 func main() {
-	in := internal.ReadFile(`files/a.txt`)
+	in := internal.ReadFile(`files/e.txt`)
 	a := internal.NewA(in)
 	out := a.Solve()
-	internal.WriteFile(out, `a_out.txt`)
+	internal.WriteFile(out, `e_out.txt`)
 }
