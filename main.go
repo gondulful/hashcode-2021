@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
-
-	"./internal"
+	"hashcode-2021/internal"
 )
 
 func main() {
 	in := internal.ReadFile(`files/a.txt`)
-	fmt.Println(in)
+	a := internal.NewA(in)
+	out := a.Solve()
+	internal.WriteFile(out, `a_out.txt`)
 }
