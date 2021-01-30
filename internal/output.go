@@ -9,9 +9,9 @@ import (
 var toString = strconv.Itoa
 
 type Output struct {
-	T2 []int
-	T3 []int
-	T4 []int
+	T2 [][]int
+	T3 [][]int
+	T4 [][]int
 }
 
 func WriteFile(o Output, file string) {
@@ -31,14 +31,14 @@ func WriteFile(o Output, file string) {
 		panic(err)
 	}
 
-	if len(o.T2) > 0 {
-		fd.WriteString(strings.Join(toStringSlice(o.T2), " ") + "\n")
+	for i := range o.T2 {
+		fd.WriteString("2 " + strings.Join(toStringSlice(o.T2[i]), " ") + "\n")
 	}
-	if len(o.T3) > 0 {
-		fd.WriteString(strings.Join(toStringSlice(o.T3), " ") + "\n")
+	for i := range o.T3 {
+		fd.WriteString("3 " + strings.Join(toStringSlice(o.T3[i]), " ") + "\n")
 	}
-	if len(o.T4) > 0 {
-		fd.WriteString(strings.Join(toStringSlice(o.T4), " ") + "\n")
+	for i := range o.T4 {
+		fd.WriteString("4 " + strings.Join(toStringSlice(o.T4[i]), " ") + "\n")
 	}
 }
 
