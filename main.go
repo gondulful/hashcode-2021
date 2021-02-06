@@ -6,6 +6,9 @@ import (
 
 func main() {
 	in := internal.ReadFile(`files/d.txt`)
+	//a := internal.NewA(in)
+	//out := a.Solve()
+	//internal.WriteFile(out, `c_out.txt`)
 
 	butcher := internal.NewButcher(in, internal.NewButcherPizzeria(in.Pizzas))
 	outOut := butcher.Solve()

@@ -1,6 +1,8 @@
 package internal
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type butcher struct {
 	in Input
@@ -26,8 +28,6 @@ func NewButcherPizzeria(pizzas []Pizza) *ButcherPizzeria {
 
 func (b *ButcherPizzeria) GetPizzaWithMaxIngr() Set {
 	var index int
-
-
 	for i, pizza := range b.pizzas {
 		if pizza.Count() > b.pizzas[index].Count() {
 			index = i
@@ -61,12 +61,26 @@ func (b ButcherPizzeria) CountPizzas() int {
 
 func (b *ButcherPizzeria) FindUnlikePizza(set Set) Set {
 	candidateIndex := 0
+	bestDiff := set.Diff(b.pizzas[candidateIndex])
+
+	//t := time.Now()
+	maxIterations := 1000
 	for index, pizza := range b.pizzas {
-		if set.Diff(pizza) > set.Diff(b.pizzas[candidateIndex]) {
-			candidateIndex = index
+		if maxIterations < 0 {
+			break
 		}
+		diff := set.Diff(pizza)
+		if diff > bestDiff {
+			candidateIndex = index
+			bestDiff = diff
+		}
+		maxIterations -= 1
 	}
-	return b.takePizza(candidateIndex)
+	//fmt.Println("find pizza:", time.Since(t))
+	//t = time.Now()
+	p := b.takePizza(candidateIndex)
+	//fmt.Println("take pizza:", time.Since(t))
+	return p
 }
 
 func NewButcher(in Input, p Pizzeria) Solver {
@@ -81,8 +95,12 @@ func (s *butcher) Solve() Output {
 
 	for i := 0; s.p.HasPizzas(4) && i < s.in.T4; i++ {
 		fmt.Printf("Pizza4: %d\n", s.p.CountPizzas())
+
 		first := s.p.GetPizzaWithMaxIngr()
+
+		//t := time.Now()
 		second := s.p.FindUnlikePizza(first)
+		//fmt.Println("FindUnlikePizza:", time.Since(t))
 		wantedThird := first.Union(second)
 		third := s.p.FindUnlikePizza(wantedThird)
 		wantedFourth := wantedThird.Union(third)
