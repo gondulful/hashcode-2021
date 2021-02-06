@@ -9,6 +9,38 @@ import (
 
 type Pizza map[string]struct{}
 
+func (p Pizza) Count() int {
+	return len(p)
+}
+
+func (p Pizza) HasElement(s string) bool {
+	_, ok := p[s]
+	return ok
+}
+
+func (p Pizza) CountIntersect(set Set) int {
+	var count int
+	for ingredient := range p {
+		if set.HasElement(ingredient) {
+			count++
+		}
+	}
+
+	return count
+}
+
+func (p Pizza) Union(set Set) Set {
+	newPizza := make(Pizza, p.Count() + set.Count())
+	for k := range p {
+		newPizza[k] = struct{}{}
+	}
+	for k := range set.(Pizza) {
+		newPizza[k] = struct{}{}
+	}
+
+	return newPizza
+}
+
 type Input struct {
 	M int
 	T2 int
