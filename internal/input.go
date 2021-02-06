@@ -18,15 +18,15 @@ func (p Pizza) HasElement(s string) bool {
 	return ok
 }
 
-func (p Pizza) CountIntersect(set Set) int {
-	var count int
+func (p Pizza) Intersect(set Set) Set {
+	newPizza := make(Pizza, set.Count())
 	for ingredient := range p {
 		if set.HasElement(ingredient) {
-			count++
+			newPizza[ingredient] = struct{}{}
 		}
 	}
 
-	return count
+	return newPizza
 }
 
 func (p Pizza) Union(set Set) Set {

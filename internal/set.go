@@ -3,7 +3,7 @@ package internal
 type Set interface {
 	HasElement(string) bool
 	Count() int
-	CountIntersect(Set) int
+	Intersect(Set) Set
 	Union(Set) Set
 }
 
