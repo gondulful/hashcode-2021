@@ -60,10 +60,7 @@ func (p Pizza) Union(set Set) Set {
 
 func (p Pizza) Diff(set Set) int {
 	count := p.Intersect(set).Count()
-	if p.Count() > set.Count() {
-		return p.Count() - count
-	}
-	return set.Count() - count
+	return set.Count() + p.Count() - count
 }
 type Input struct {
 	M      int
