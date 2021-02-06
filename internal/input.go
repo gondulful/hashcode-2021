@@ -58,12 +58,19 @@ func (p Pizza) Union(set Set) Set {
 	return newPizza
 }
 
+func (p Pizza) Diff(set Set) int {
+	count := p.Intersect(set).Count()
+	if p.Count() > set.Count() {
+		return p.Count() - count
+	}
+	return set.Count() - count
+}
 type Input struct {
-	M int
-	T2 int
-	T3 int
-	T4 int
-	pizzas []Pizza
+	M      int
+	T2     int
+	T3     int
+	T4     int
+	Pizzas []Pizza
 }
 
 func ReadFile(filename string) (i Input) {
@@ -95,7 +102,7 @@ func ReadFile(filename string) (i Input) {
 				p.ingredients[ingredient] = struct{}{}
 			}
 
-			i.pizzas = append(i.pizzas, p)
+			i.Pizzas = append(i.Pizzas, p)
 			pizzaNumber++
 		}
 	}

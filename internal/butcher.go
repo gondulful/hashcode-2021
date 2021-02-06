@@ -11,6 +11,57 @@ type Pizzeria interface {
 	FindUnlikePizza(Set) Set
 }
 
+type ButcherPizzeria struct {
+	pizzas []Pizza
+}
+
+func NewButcherPizzeria(pizzas []Pizza) *ButcherPizzeria {
+	return &ButcherPizzeria{
+		pizzas: pizzas,
+	}
+}
+
+func (b *ButcherPizzeria) GetPizzaWithMaxIngr() Set {
+	var index int
+
+
+	for i, pizza := range b.pizzas {
+		if pizza.Count() > b.pizzas[index].Count() {
+			index = i
+		}
+	}
+
+	return b.takePizza(index)
+}
+
+func (b *ButcherPizzeria) takePizza(index int) Set {
+	pizza := b.pizzas[index]
+
+	newPizzas := make([]Pizza, 0)
+	for i, p := range b.pizzas {
+		if i != index {
+			newPizzas = append(newPizzas, p)
+		}
+	}
+
+	b.pizzas = newPizzas
+	return pizza
+}
+
+func (b ButcherPizzeria) HasPizzas(i int) bool {
+	return len(b.pizzas) >= i
+}
+
+func (b *ButcherPizzeria) FindUnlikePizza(set Set) Set {
+	candidateIndex := 0
+	for index, pizza := range b.pizzas {
+		if set.Diff(pizza) > set.Diff(b.pizzas[candidateIndex]) {
+			candidateIndex = index
+		}
+	}
+	return b.takePizza(candidateIndex)
+}
+
 func NewButcher(in Input, p Pizzeria) Solver {
 	return &butcher{
 		in,
