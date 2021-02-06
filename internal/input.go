@@ -7,22 +7,36 @@ import (
 	"strings"
 )
 
-type Pizza map[string]struct{}
+type Pizza struct{
+	id int
+	ingredients map[string]struct{}
+}
+
+func (p Pizza) SetId(id int) {
+	p.id = id
+}
+
+func (p Pizza) Id() int {
+	return p.id
+}
 
 func (p Pizza) Count() int {
-	return len(p)
+	return len(p.ingredients)
 }
 
 func (p Pizza) HasElement(s string) bool {
-	_, ok := p[s]
+	_, ok := p.ingredients[s]
 	return ok
 }
 
 func (p Pizza) Intersect(set Set) Set {
-	newPizza := make(Pizza, set.Count())
-	for ingredient := range p {
+	newPizza := Pizza{
+		id:          -1,
+		ingredients: make(map[string]struct{}, set.Count()),
+	}
+	for ingredient := range p.ingredients {
 		if set.HasElement(ingredient) {
-			newPizza[ingredient] = struct{}{}
+			newPizza.ingredients[ingredient] = struct{}{}
 		}
 	}
 
@@ -30,12 +44,15 @@ func (p Pizza) Intersect(set Set) Set {
 }
 
 func (p Pizza) Union(set Set) Set {
-	newPizza := make(Pizza, p.Count() + set.Count())
-	for k := range p {
-		newPizza[k] = struct{}{}
+	newPizza := Pizza{
+		id:          -1,
+		ingredients: make(map[string]struct{}, p.Count() + set.Count()),
 	}
-	for k := range set.(Pizza) {
-		newPizza[k] = struct{}{}
+	for k := range p.ingredients {
+		newPizza.ingredients[k] = struct{}{}
+	}
+	for k := range set.(Pizza).ingredients {
+		newPizza.ingredients[k] = struct{}{}
 	}
 
 	return newPizza
@@ -58,6 +75,7 @@ func ReadFile(filename string) (i Input) {
 
 	var isFirstLine = true
 	sc := bufio.NewScanner(fd)
+	var pizzaNumber int
 	for sc.Scan() {
 		line := sc.Text()
 		fields := strings.Fields(line)
@@ -69,12 +87,16 @@ func ReadFile(filename string) (i Input) {
 			i.T4 = toInt(fields[3])
 			isFirstLine = false
 		} else {
-			p := make(Pizza, len(fields[1:]))
+			p := Pizza{
+				id:          pizzaNumber,
+				ingredients: make(map[string]struct{}, len(fields[1:])),
+			}
 			for _, ingredient := range fields[1:] {
-				p[ingredient] = struct{}{}
+				p.ingredients[ingredient] = struct{}{}
 			}
 
 			i.pizzas = append(i.pizzas, p)
+			pizzaNumber++
 		}
 	}
 
