@@ -9,4 +9,8 @@ func main() {
 	a := internal.NewA(in)
 	out := a.Solve()
 	internal.WriteFile(out, `e_out.txt`)
+
+	butcher := internal.NewButcher(in)
+	outOut := a.Solve()
+	internal.WriteFile(outOut, `e_out.txt`)
 }
