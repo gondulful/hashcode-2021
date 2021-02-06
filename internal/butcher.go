@@ -1,5 +1,7 @@
 package internal
 
+import "fmt"
+
 type butcher struct {
 	in Input
 	p Pizzeria
@@ -8,6 +10,7 @@ type butcher struct {
 type Pizzeria interface {
 	GetPizzaWithMaxIngr() Set
 	HasPizzas(int) bool
+	CountPizzas() int
 	FindUnlikePizza(Set) Set
 }
 
@@ -52,6 +55,10 @@ func (b ButcherPizzeria) HasPizzas(i int) bool {
 	return len(b.pizzas) >= i
 }
 
+func (b ButcherPizzeria) CountPizzas() int {
+	return len(b.pizzas)
+}
+
 func (b *ButcherPizzeria) FindUnlikePizza(set Set) Set {
 	candidateIndex := 0
 	for index, pizza := range b.pizzas {
@@ -73,6 +80,7 @@ func (s *butcher) Solve() Output {
 	out := Output{}
 
 	for i := 0; s.p.HasPizzas(4) && i < s.in.T4; i++ {
+		fmt.Printf("Pizza4: %d\n", s.p.CountPizzas())
 		first := s.p.GetPizzaWithMaxIngr()
 		second := s.p.FindUnlikePizza(first)
 		wantedThird := first.Union(second)
@@ -89,6 +97,7 @@ func (s *butcher) Solve() Output {
 	}
 
 	for i := 0; s.p.HasPizzas(3) && i < s.in.T3; i++ {
+		fmt.Printf("Pizza3: %d\n", s.p.CountPizzas())
 		first := s.p.GetPizzaWithMaxIngr()
 		second := s.p.FindUnlikePizza(first)
 		wantedThird := first.Union(second)
@@ -102,6 +111,7 @@ func (s *butcher) Solve() Output {
 	}
 
 	for i := 0; s.p.HasPizzas(2) && i < s.in.T2; i++ {
+		fmt.Printf("Pizza2: %d\n", s.p.CountPizzas())
 		first := s.p.GetPizzaWithMaxIngr()
 		second := s.p.FindUnlikePizza(first)
 
