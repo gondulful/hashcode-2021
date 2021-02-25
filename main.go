@@ -1,11 +1,26 @@
 package main
 
 import (
+	"fmt"
 	"hashcode-2021/internal"
 )
 
 func main() {
-	in := internal.ReadFile(`files/e.txt`)
+	for f := 'a'; f <= 'f'; f++ {
+		calc(string(f))
+	}
+
+	//a := internal.NewA(in)
+	//out := a.Solve()
+	//internal.WriteFile(out, `c_out.txt`)
+
+	//butcher := internal.NewButcher(in, internal.NewButcherPizzeria(in.Pizzas))
+	//outOut := butcher.Solve()
+	//internal.WriteFile(outOut, `a_butcher_out.txt`)
+}
+
+func calc(file string) {
+	in := internal.ReadFile(fmt.Sprintf(`files/%s.txt`, file))
 	_ = in
 
 	counts := make(map[string]int)
@@ -35,12 +50,5 @@ func main() {
 		intersects = append(intersects, intersect)
 	}
 
-	internal.WriteFile(internal.Output{Intersections: intersects}, `a_out.txt`)
-	//a := internal.NewA(in)
-	//out := a.Solve()
-	//internal.WriteFile(out, `c_out.txt`)
-
-	//butcher := internal.NewButcher(in, internal.NewButcherPizzeria(in.Pizzas))
-	//outOut := butcher.Solve()
-	//internal.WriteFile(outOut, `a_butcher_out.txt`)
+	internal.WriteFile(internal.Output{Intersections: intersects}, fmt.Sprintf(`out/%s.txt`, file))
 }
