@@ -20,7 +20,7 @@ type Output struct {
 }
 
 func WriteFile(o Output, file string) {
-	fd, err := os.OpenFile(file, os.O_WRONLY | os.O_CREATE, 0666)
+	fd, err := os.OpenFile(file, os.O_WRONLY | os.O_CREATE | os.O_TRUNC, 0666)
 	if err != nil {
 		panic(err)
 	}
