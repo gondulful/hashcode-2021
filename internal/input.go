@@ -7,65 +7,9 @@ import (
 	"strings"
 )
 
-type Pizza struct{
-	id int
-	ingredients map[string]struct{}
-}
-
-func (p Pizza) SetId(id int) {
-	p.id = id
-}
-
-func (p Pizza) Id() int {
-	return p.id
-}
-
-func (p Pizza) Count() int {
-	return len(p.ingredients)
-}
-
-func (p Pizza) HasElement(s string) bool {
-	_, ok := p.ingredients[s]
-	return ok
-}
-
-func (p Pizza) Intersect(set Set) Set {
-	newPizza := Pizza{
-		id:          -1,
-		ingredients: make(map[string]struct{}, set.Count()),
-	}
-	for ingredient := range p.ingredients {
-		if set.HasElement(ingredient) {
-			newPizza.ingredients[ingredient] = struct{}{}
-		}
-	}
-
-	return newPizza
-}
-
-func (p Pizza) Union(set Set) Set {
-	newPizza := Pizza{
-		id:          -1,
-		ingredients: make(map[string]struct{}, p.Count() + set.Count()),
-	}
-	for k := range p.ingredients {
-		newPizza.ingredients[k] = struct{}{}
-	}
-	for k := range set.(Pizza).ingredients {
-		newPizza.ingredients[k] = struct{}{}
-	}
-
-	return newPizza
-}
-
-func (p Pizza) Diff(set Set) int {
-	count := p.Intersect(set).Count()
-	return set.Count() + p.Count() - count
-}
-
 type InputStreet struct {
 	B, E int
-	name string
+	Name string
 	L int
 }
 
@@ -109,7 +53,7 @@ func ReadFile(filename string) (i Input) {
 		var street InputStreet
 		street.B = toInt(fields[0])
 		street.E = toInt(fields[1])
-		street.name = fields[2]
+		street.Name = fields[2]
 		street.L = toInt(fields[3])
 
 		i.Streets = append(i.Streets, street)

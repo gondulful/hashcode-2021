@@ -8,22 +8,22 @@ func main() {
 	in := internal.ReadFile(`files/e.txt`)
 	_ = in
 
-
-	var out = internal.Output{
-		Intersections: []internal.OutputIntersection{
-			{Id: 1, StreetLights: []internal.OutputStreetLights{
-				{"rue-d-athenes", 2},
-				{"rue-d-amsterdam", 1},
-			}},
-			{Id: 0, StreetLights: []internal.OutputStreetLights{
-				{"rue-de-londres", 2},
-			}},
-			{Id: 2, StreetLights: []internal.OutputStreetLights{
-				{"rue-de-moscou", 1},
-			}},
-		},
+	outm := make(map[int]internal.OutputIntersection)
+	for _, s := range in.Streets {
+		if _, ok := outm[s.E]; !ok {
+			outm[s.E] = internal.OutputIntersection{Id: s.E}
+		}
+		sl := outm[s.E]
+		sl.StreetLights = append(sl.StreetLights, internal.OutputStreetLights{Name:s.Name, Sec: 1})
+		outm[s.E] = sl
 	}
-	internal.WriteFile(out, `a_out.txt`)
+
+	intersects := make([]internal.OutputIntersection, 0, len(outm))
+	for _, intersect := range outm {
+		intersects = append(intersects, intersect)
+	}
+
+	internal.WriteFile(internal.Output{Intersections: intersects}, `a_out.txt`)
 	//a := internal.NewA(in)
 	//out := a.Solve()
 	//internal.WriteFile(out, `c_out.txt`)
