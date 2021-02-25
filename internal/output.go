@@ -3,15 +3,20 @@ package internal
 import (
 	"os"
 	"strconv"
-	"strings"
 )
 
 var toString = strconv.Itoa
 
+type OutputStreetLights struct {
+	Name string
+	Sec  int
+}
+type OutputIntersection struct {
+	Id int
+	StreetLights []OutputStreetLights
+}
 type Output struct {
-	T2 [][]int
-	T3 [][]int
-	T4 [][]int
+	Intersections []OutputIntersection
 }
 
 func WriteFile(o Output, file string) {
@@ -21,8 +26,8 @@ func WriteFile(o Output, file string) {
 	}
 	defer fd.Close()
 
-	D := len(o.T2) + len(o.T3) + len(o.T4)
-	_, err = fd.WriteString(toString(D))
+	var numIntersections = len(o.Intersections)
+	_, err = fd.WriteString(toString(numIntersections))
 	if err != nil {
 		panic(err)
 	}
@@ -31,14 +36,12 @@ func WriteFile(o Output, file string) {
 		panic(err)
 	}
 
-	for i := range o.T2 {
-		fd.WriteString("2 " + strings.Join(toStringSlice(o.T2[i]), " ") + "\n")
-	}
-	for i := range o.T3 {
-		fd.WriteString("3 " + strings.Join(toStringSlice(o.T3[i]), " ") + "\n")
-	}
-	for i := range o.T4 {
-		fd.WriteString("4 " + strings.Join(toStringSlice(o.T4[i]), " ") + "\n")
+	for _, intersection := range o.Intersections {
+		fd.WriteString(toString(intersection.Id) + "\n")
+		fd.WriteString(toString(len(intersection.StreetLights)) + "\n")
+		for _, item := range intersection.StreetLights {
+			fd.WriteString(item.Name + " " + toString(item.Sec) + "\n")
+		}
 	}
 }
 
